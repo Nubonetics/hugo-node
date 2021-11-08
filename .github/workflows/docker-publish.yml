@@ -69,20 +69,20 @@ jobs:
           echo IMAGE_NAME=$IMAGE_NAME
 
 
-          echo "TAG={$TAG}" >> $GITHUB_ENV
-          echo "IMAGE_NAME={${IMAGE_NAME}}" >> $GITHUB_ENV
-          echo "IMAGE_FULL_NAME={${IMAGE_FULL_NAME}}" >> $GITHUB_ENV
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
+          echo "IMAGE_FULL_NAME=${IMAGE_FULL_NAME}" >> $GITHUB_ENV
 
       - name: Build image
         run: |
-          docker build . --file binder/Dockerfile --tag ${ env.IMAGE_NAME }
+          docker build . --file binder/Dockerfile --tag ${{ env.IMAGE_NAME }}
 
       - name: Log into GitHub registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
       - name: Push image to GitHub registry
         run: |
-          IMAGE_ID=docker.pkg.github.com/${ env.IMAGE_FULL_NAME }
+          IMAGE_ID=docker.pkg.github.com/${{ env.IMAGE_FULL_NAME }}
 
 
           echo IMAGE_ID=$IMAGE_ID
