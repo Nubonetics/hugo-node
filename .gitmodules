@@ -1,3 +1,6 @@
 [submodule "binder/nde"]
 	path = binder/nde
 	url = https://gitlab.com/nubodev/nde.git
+[submodule "test/starter-hugo-academic"]
+	path = test/starter-hugo-academic
+	url = https://github.com/wowchemy/starter-hugo-academic.git

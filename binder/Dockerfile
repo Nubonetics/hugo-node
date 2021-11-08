@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM klakegg/hugo:0.88.0-ext-ubuntu
 
 # Install basic requirements
 RUN apt-get update && \
