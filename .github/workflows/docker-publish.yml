@@ -86,9 +86,9 @@ jobs:
 
 
           echo IMAGE_ID=$IMAGE_ID
-          echo TAG=${ env.TAG }
+          echo TAG=${{ env.TAG }}
 
-          docker tag ${ env.IMAGE_NAME } $IMAGE_ID
+          docker tag ${{ env.IMAGE_NAME }} $IMAGE_ID
           docker push $IMAGE_ID
 
       - name: Log into Docker Hub registry
@@ -96,9 +96,9 @@ jobs:
 
       - name: Push image to Docker Hub registry
         run: |
-          IMAGE_ID=${ env.IMAGE_FULL_NAME }
+          IMAGE_ID=${{ env.IMAGE_FULL_NAME }}
           
           echo IMAGE_ID=$IMAGE_ID
 
-          docker tag ${ env.IMAGE_NAME } $IMAGE_ID
+          docker tag ${{ env.IMAGE_NAME }} $IMAGE_ID
           docker push $IMAGE_ID
