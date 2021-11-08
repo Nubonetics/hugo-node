@@ -1,11 +1,11 @@
-FROM klakegg/hugo:ext-pandoc
+FROM python:3.8-slim
 
 RUN apk update
 
-COPY binder/apk.txt /tmp/
-RUN apk add \
-        $(cut -d# -f1 </tmp/apk.txt) && \
-    rm -rf /var/lib/apt/lists/* /tmp/apk.txt
+COPY binder/apt.txt /tmp/
+RUN apt-get install \
+        $(cut -d# -f1 </tmp/apt.txt) && \
+    rm -rf /var/lib/apt/lists/* /tmp/apt.txt
 
 COPY binder/nde/env.sh /etc/profile.d/ade_env.sh
 COPY binder/nde/entrypoint /tmp/ade_entrypoint
