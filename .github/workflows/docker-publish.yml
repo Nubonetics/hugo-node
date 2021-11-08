@@ -90,11 +90,11 @@ jobs:
           docker tag ${{ env.IMAGE_NAME }} $IMAGE_ID
           docker push $IMAGE_ID
 
-      - name: Log into Docker Hub registry
-        run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u nuboneticsadmin --password-stdin
-
       - name: Push image to Docker Hub registry
         run: |
+          # Log into Docker Hub registry
+          echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u nuboneticsadmin --password-stdin
+
           IMAGE_ID=${{ env.IMAGE_FULL_NAME }}
           
           echo IMAGE_ID=$IMAGE_ID
