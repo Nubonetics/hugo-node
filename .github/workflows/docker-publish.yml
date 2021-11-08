@@ -64,7 +64,7 @@ jobs:
 
       - name: Build image
         run: |
-          docker build . --file binder/Dockerfile --tag ${{ github.repository }}:$TAG
+          docker build . --file binder/Dockerfile --tag ${{ github.event.repository.name }}:$TAG
 
       - name: Log into GitHub registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
