@@ -3,7 +3,7 @@ FROM python:3.8-slim
 # Install basic requirements
 RUN apt-get update && \
     echo 'Etc/UTC' > /etc/timezone && \
-    ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
+    ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
     DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
     software-properties-common \
     sudo locales apt-utils clang wget \
