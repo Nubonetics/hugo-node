@@ -37,8 +37,8 @@ COPY binder/requirements.txt /tmp/
 RUN python3 -m pip install --upgrade pip setuptools wheel && \
     python3 -m pip install -r /tmp/requirements.txt
 
+# Packages for a Python virtual environment 
 COPY binder/Pipfile /tmp/
-RUN cd /tmp && pip install pipenv
 
 COPY binder/nde/env.sh /etc/profile.d/ade_env.sh
 COPY binder/nde/entrypoint /tmp/ade_entrypoint
