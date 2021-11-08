@@ -15,9 +15,6 @@ RUN apt-get update && \
     lsb-release \
     gettext-base \
     keyboard-configuration && \
-    add-apt-repository ppa:git-core/ppa && \
-    apt-get update && \
-    apt-get install -y git && \
     rm -rf /var/lib/apt/lists/*
 
 RUN locale-gen en_US.UTF-8; dpkg-reconfigure -f noninteractive locales
