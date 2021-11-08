@@ -2,7 +2,7 @@ FROM klakegg/hugo:ext-pandoc
 
 RUN apk update
 
-COPY apk.txt /tmp/
+COPY binder/apk.txt /tmp/
 RUN apk add \
         $(cut -d# -f1 </tmp/apk.txt) && \
     rm -rf /var/lib/apt/lists/* /tmp/apk.txt
