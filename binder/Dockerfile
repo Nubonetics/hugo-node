@@ -1,4 +1,6 @@
 FROM klakegg/hugo:0.88.0-ext-ubuntu
+ENV HOME=
+USER root
 
 # Install basic requirements
 RUN apt-get update && \
@@ -41,7 +43,7 @@ RUN python3 -m pip install --upgrade pip setuptools wheel && \
 COPY binder/Pipfile /tmp/
 
 COPY binder/nde/env.sh /etc/profile.d/ade_env.sh
-COPY binder/nde/entrypoint /tmp/ade_entrypoint
+COPY binder/nde/entrypoint /tmp/nde_entrypoint
 
-ENTRYPOINT ["/tmp/ade_entrypoint"]
+ENTRYPOINT ["/tmp/nde_entrypoint"]
 CMD ["/bin/sh", "-c", "trap 'exit 147' TERM; tail -f /dev/null & wait ${!}"]
