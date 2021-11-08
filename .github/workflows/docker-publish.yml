@@ -1,0 +1,93 @@
+name: Docker
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - '*'
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+jobs:
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run tests
+        run: |
+          if [ -f docker-compose.test.yml ]; then
+            docker-compose --file docker-compose.test.yml build
+            docker-compose --file docker-compose.test.yml run sut
+          else
+            docker build . --file Dockerfile
+          fi
+
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  push:
+    # Ensure test job passes before pushing image.
+    needs: test
+
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Image name
+        run: |
+          # Use the branch name as the image name
+          export TAG=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          
+          # Use `latest` as the image name for the master branch
+          [ "$TAG" == "main" ] && TAG=latest
+          
+          # Change all uppercase to lowercase
+          TAG=$(echo $TAG | tr '[A-Z]' '[a-z]')
+          
+          echo "::set-env name=TAG::$TAG"
+
+      - name: Build image
+        run: |
+          docker build . --file binder/Dockerfile --tag ${{ github.repository }}:$TAG
+
+      - name: Log into GitHub registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Push image to GitHub registry
+        run: |
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo TAG=$TAG
+
+          docker tag $TAG $IMAGE_ID:$TAG
+          docker push $IMAGE_ID:$TAG
+
+      - name: Log into Docker Hub registry
+        run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u nuboneticsadmin --password-stdin
+
+      - name: Push image to Docker Hub registry
+        run: |
+          IMAGE_ID=nubonetics/$TAG
+          
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo TAG=$TAG
+
+          docker tag $TAG $IMAGE_ID:$TAG
+          docker push $IMAGE_ID:$TAG
