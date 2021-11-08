@@ -1,0 +1,3 @@
+[submodule "binder/nde"]
+	path = binder/nde
+	url = https://gitlab.com/nubodev/nde.git
