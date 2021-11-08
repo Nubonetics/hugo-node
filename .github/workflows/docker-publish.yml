@@ -58,7 +58,7 @@ jobs:
           [ "$TAG" == "main" ] && TAG=latest
           
           IMAGE_NAME=${{ github.event.repository.name }}:$TAG
-          IMAGE_FULL_NAME=${{ github.repository }}:$TAG
+          IMAGE_FULL_NAME=${{ github.repository }}/$TAG
 
           # Change all uppercase to lowercase
           TAG=$(echo $TAG | tr '[A-Z]' '[a-z]')
