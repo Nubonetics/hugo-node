@@ -60,7 +60,7 @@ jobs:
           # Change all uppercase to lowercase
           TAG=$(echo $TAG | tr '[A-Z]' '[a-z]')
           
-          echo "::set-env name=TAG::$TAG"
+          echo "{TAG}={$TAG}" >> $GITHUB_ENV
 
       - name: Build image
         run: |
